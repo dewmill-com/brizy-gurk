@@ -28,6 +28,7 @@ jobs:
         [ '.[!.]*' = "$(echo .[!.]*)" ] || mv .[!.]* ../keep/
         [ '..?*' = "$(echo ..?*)" ] || mv ..?* ../keep/
         mv ../keep/.git .
+        git fetch origin master
         git checkout master -- .
         [ '../keep/.[!.]*' = "$(echo ../keep/.[!.]*)" ] || mv ../keep/.[!.]* .
         [ '../keep/..?*' = "$(echo ../keep/..?*)" ] || mv ../keep/..?* .
