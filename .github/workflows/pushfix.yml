@@ -30,6 +30,7 @@ jobs:
         mv ../keep/.git .
         git fetch origin master
         git checkout origin/master -- .
+        tidy index.html
         [ '../keep/.[!.]*' = "$(echo ../keep/.[!.]*)" ] || mv ../keep/.[!.]* .
         [ '../keep/..?*' = "$(echo ../keep/..?*)" ] || mv ../keep/..?* .
         git add -A
