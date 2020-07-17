@@ -22,6 +22,8 @@ jobs:
     # Runs a set of commands using the runners shell
     - name: Forced push keep history
       run: |
+        git config user.email "gitcommits@dewmill.com"
+        git config user.name "Fixpush bot"
         mkdir ../keep
         [ '.[!.]*' = "$(echo .[!.]*)" ] || mv .[!.]* ../keep/
         [ '..?*' = "$(echo ..?*)" ] || mv ..?* ../keep/
