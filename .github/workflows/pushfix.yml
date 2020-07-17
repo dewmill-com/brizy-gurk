@@ -23,10 +23,12 @@ jobs:
     - name: Forced push keep history
       run: |
         mkdir ../keep
-        mv .[!.]* ..?* ../keep
+        [ '.[!.]*' = "$(echo .[!.]*)" ] || mv .[!.]* ../keep/
+        [ '..?*' = "$(echo ..?*" ] || mv ..?* ../keep/
         mv ../keep/.git .
         git checkout master .
-        mv ../keep/.[!.]* ../keep/..?* .
+        [ '../keep/.[!.]*' = "$(echo ../keep/.[!.]*)" ] || mv ../keep/.[!.]* .
+        [ '../keep/..?*' = "$(echo ../keep/..?*" ] || mv ../keep/..?* .
         git add -A
         git commit -m "Changes $(date --rfc-2822)"
         git push
