@@ -22,11 +22,13 @@ jobs:
     # Runs a set of commands using the runners shell
     - name: Forced push keep history
       run: |
+        git branch -a
+        git remote -v
         mkdir ../keep
         [ '.[!.]*' = "$(echo .[!.]*)" ] || mv .[!.]* ../keep/
         [ '..?*' = "$(echo ..?*)" ] || mv ..?* ../keep/
         mv ../keep/.git .
-        git checkout master .
+        git checkout master -- .
         [ '../keep/.[!.]*' = "$(echo ../keep/.[!.]*)" ] || mv ../keep/.[!.]* .
         [ '../keep/..?*' = "$(echo ../keep/..?*)" ] || mv ../keep/..?* .
         git add -A
