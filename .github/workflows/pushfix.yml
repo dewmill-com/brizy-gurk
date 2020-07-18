@@ -35,6 +35,9 @@ jobs:
         git fetch origin master
         git checkout origin/master -- .
         tidy -omit -ashtml -i -q --wrap 0 -m index.html || [[ $? -eq 1 ]]
+        perl -0777 -ne 'while(m#<style[^>]*>([^<]*)</style>\n?#g){print "$1\n";}' index.html > index.css
+        perl -0777 -pe 's#<style[^>]*>([^<]*)</style>\n?##g' index.html > index_new.html
+        rm index.css index_new.html
         [ '../keep/.[!.]*' = "$(echo ../keep/.[!.]*)" ] || mv ../keep/.[!.]* .
         [ '../keep/..?*' = "$(echo ../keep/..?*)" ] || mv ../keep/..?* .
         git add -A
