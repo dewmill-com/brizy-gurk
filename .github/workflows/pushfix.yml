@@ -21,7 +21,10 @@ jobs:
     
     - name: Install dependecies
       run: |
-        sudo apt-get install tidy
+        sudo apt-get -y install tidy cleancss
+        sudo npm install -g csso-cli
+        sudo npm install -g css-purge
+        sudo npm install -g rename-css-selectors
 
     # Runs a set of commands using the runners shell
     - name: Forced push keep history
@@ -35,8 +38,21 @@ jobs:
         git fetch origin master
         git checkout origin/master -- .
         tidy -omit -ashtml -i -q --wrap 0 -m index.html || [[ $? -eq 1 ]]
+        
+        node -e 'const rcs = require("rename-css-selectors");
+          try { rcs.process.autoSync(["index.html"], options);
+          rcs.generateMappingSync("./", { overwrite: true });
+          } catch (err) {
+            console.error(err);
+          }'
+        
         perl -0777 -ne 'while(m#<style[^>]*>([^<]*)</style>\n?#g){print "$1\n";}' index.html > index.css
         perl -0777 -pe 's#<style[^>]*>([^<]*)</style>\n?##g' index.html > index_new.html
+        css-purge -i index.css -m index_new.html -o index.css2
+        csso --force-media-merge -i index.css2 -o index.css3
+        cleancss -O2 --format beautify index.css3 > index.css4        
+        
+        npm install --save rename-css-selectors
         rm index.css index_new.html
         [ '../keep/.[!.]*' = "$(echo ../keep/.[!.]*)" ] || mv ../keep/.[!.]* .
         [ '../keep/..?*' = "$(echo ../keep/..?*)" ] || mv ../keep/..?* .
