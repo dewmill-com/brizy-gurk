@@ -39,7 +39,7 @@ jobs:
         git checkout origin/master -- .
         tidy -omit -ashtml -i -q --wrap 0 -m index.html || [[ $? -eq 1 ]]
         
-        node -e 'const rcs = require("rename-css-selectors");
+        NODE_PATH=$(npm root -g) node -e 'const rcs = require("rename-css-selectors");
           try { rcs.process.autoSync(["index.html"], options);
           rcs.generateMappingSync("./", { overwrite: true });
           } catch (err) {
