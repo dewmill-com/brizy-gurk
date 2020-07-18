@@ -51,9 +51,12 @@ jobs:
         css-purge -i index.css -m index_new.html -o index.css2
         csso --force-media-merge -i index.css2 -o index.css3
         cleancss -O2 --format beautify index.css3 > index.css4        
+  
+        perl -0777 -pe 's#</head>#<link rel="stylesheet" type="text/css" href="index.css" /></head>#g' index.html > index_new.html
+        mv index_new.html index.html
+        mv index.css4 index.css  
+        rm index.css2 index.css3 index_new.html
         
-        npm install --save rename-css-selectors
-        rm index.css index_new.html
         [ '../keep/.[!.]*' = "$(echo ../keep/.[!.]*)" ] || mv ../keep/.[!.]* .
         [ '../keep/..?*' = "$(echo ../keep/..?*)" ] || mv ../keep/..?* .
         git add -A
