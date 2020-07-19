@@ -44,42 +44,38 @@ jobs:
         [ '../keep/.[!.]*' = "$(echo ../keep/.[!.]*)" ] || mv ../keep/.[!.]* .
         [ '../keep/..?*' = "$(echo ../keep/..?*)" ] || mv ../keep/..?* .
         
-        echo "Run tidy"
-        tidy --show-warnings no -omit -ashtml -i -q --wrap 0 -m index.html || [[ $? -eq 1 ]]
+        for FILE in *.html; do
         
-        echo "Extract css from html"
-        perl -0777 -ne 'while(m#<style[^>]*>([^<]*)</style>\n?#g){print "$1\n";}' index.html > index.css
-        perl -0777 -pe 's#<style[^>]*>([^<]*)</style>\n?##g' index.html > index.html.2 && mv index.html.2 index.html
+          echo "Run tidy on $FILE"
+          tidy --show-warnings no -omit -ashtml -i -q --wrap 0 -m "$FILE" || [[ $? -eq 1 ]]
         
-        #echo "Run csdtidy"
-        #csstidy index.css index.css.2 && mv index.css.2 index.css
+          echo "Extract css from html for $FILE"
+          perl -0777 -ne 'while(m#<style[^>]*>([^<]*)</style>\n?#g){print "$1\n";}' "$FILE" > "$FILE.css"
+          perl -0777 -pe 's#<style[^>]*>([^<]*)</style>\n?##g' "$FILE" > "$FILE.2" && mv "$FILE.2" "$FILE"
+        
+          #echo "Run csdtidy"
+          #csstidy index.css index.css.2 && mv index.css.2 index.css
 
-        echo "Run cleancss"
-        cleancss -O2 --format beautify index.css > index.css.2 && mv index.css.2 index.css
-
-        echo "Run css-purge"
-        #css-purge -i index.css -m index.html -o index.css.2 && mv index.css.2 index.css
+          echo "Run cleancss on $FILE"
+          cleancss -O2 --format beautify "$FILE.css" > "$FILE.css.2" && mv "$FILE.css.2" "$FILE.css"
         
-        echo "Run csso"
-        #csso --force-media-merge -i index.css -o index.css.2 && mv index.css.2 index.css 
-        #csso -i index.css -o index.css.2 && mv index.css.2 index.css
+          echo "Run csso"
+          csso --force-media-merge -i "$FILE.css" -o "$FILE.css.2" && mv "$FILE.css.2" "$FILE.css"
+          #csso -i index.css -o index.css.2 && mv index.css.2 index.css
         
-        echo "Re-insert css link in html"
-        #perl -0777 -pe 's#<body#<link rel="stylesheet" type="text/css" href="index.css" /><body#g' index.html > index.html
-        perl -0777 -pe 's#<body#<link rel="stylesheet" type="text/css" href="index.css" /><body#g' index.html > index.html.2 && mv index.html.2 index.html
+          echo "Run css-purge"
+          css-purge -i "$FILE.css" -m "$FILE" -o "$FILE.css.2" && mv "$FILE.css.2" "$FILE.css"
         
-        #echo "Cleanup"
-        #rm index_new.html
-        #mv index.css4 index.css  
-        #rm index.css2 index.css3
-        
-        echo "Run rename-css-selectors"
-        NODE_PATH=$(npm root -g) node -e 'const rcs = require("rename-css-selectors");
-          try { rcs.process.autoSync(["index.html", "index.css"]);
-          rcs.generateMappingSync("./", { overwrite: true });
-          } catch (err) {
-            console.error(err);
-          }' && mv rcs/* . && rmdir rcs && rm -f renaming_map.json
+          echo "Re-insert css link in html"
+          perl -0777 -pe 's#<body#<link rel="stylesheet" type="text/css" href="'$FILE.css'" /><body#g' "$FILE" > "$FILE.2" && mv "$FILE.2" "$FILE"
+    
+          #echo "Run rename-css-selectors"
+          #NODE_PATH=$(npm root -g) node -e 'const rcs = require("rename-css-selectors");
+          #  try { rcs.process.autoSync(["index.html", "**/*.css"]);
+          #  rcs.generateMappingSync("./", { overwrite: true,  });
+          #  } catch (err) {
+          #    console.error(err);
+          #  }' && mv rcs/* . && rmdir rcs && rm -f renaming_map.json
         
         echo "Create and push commit"
         git add -A
