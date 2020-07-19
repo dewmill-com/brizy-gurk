@@ -59,14 +59,14 @@ jobs:
           echo "Run cleancss on $FILE"
           cleancss -O2 --format beautify "$FILE.css" > "$FILE.css.2" && mv "$FILE.css.2" "$FILE.css"
         
-          echo "Run csso"
+          echo "Run csso on $FILE"
           csso --force-media-merge -i "$FILE.css" -o "$FILE.css.2" && mv "$FILE.css.2" "$FILE.css"
           #csso -i index.css -o index.css.2 && mv index.css.2 index.css
         
-          echo "Run css-purge"
+          echo "Run css-purge on $FILE"
           css-purge -i "$FILE.css" -m "$FILE" -o "$FILE.css.2" && mv "$FILE.css.2" "$FILE.css"
         
-          echo "Re-insert css link in html"
+          echo "Re-insert css link in html in $FILE"
           perl -0777 -pe 's#<body#<link rel="stylesheet" type="text/css" href="'$FILE.css'" /><body#g' "$FILE" > "$FILE.2" && mv "$FILE.2" "$FILE"
     
           #echo "Run rename-css-selectors"
