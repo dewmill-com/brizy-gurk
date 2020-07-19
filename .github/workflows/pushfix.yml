@@ -44,38 +44,38 @@ jobs:
         [ '../keep/..?*' = "$(echo ../keep/..?*)" ] || mv ../keep/..?* .
         
         echo "Run tidy"
-        #tidy --show-warnings no -omit -ashtml -i -q --wrap 0 -m index.html || [[ $? -eq 1 ]]
+        tidy --show-warnings no -omit -ashtml -i -q --wrap 0 -m index.html || [[ $? -eq 1 ]]
         
         echo "Extract css from html"
         perl -0777 -ne 'while(m#<style[^>]*>([^<]*)</style>\n?#g){print "$1\n";}' index.html > index.css
-        perl -0777 -pe 's#<style[^>]*>([^<]*)</style>\n?##g' index.html > index_new.html
+        perl -0777 -pe 's#<style[^>]*>([^<]*)</style>\n?##g' index.html > index.html.2 && mv index.html.2 index.html
         
         echo "Run css-purge"
-        #css-purge -i index.css -m index_new.html -o index.css2
+        #css-purge -i index.css -m index.html -o index.css.2 && mv index.css.2 index.css
         
         echo "Run csso"
-        #csso --force-media-merge -i index.css2 -o index.css3 
-        #csso -i index.css2 -o index.css3
+        #csso --force-media-merge -i index.css -o index.css.2 && mv index.css.2 index.css 
+        #csso -i index.css -o index.css.2 && mv index.css.2 index.css
         
         echo "Run cleancss"
-        #cleancss -O2 --format beautify index.css3 > index.css4
+        cleancss -O2 --format beautify index.css > index.css.2 && mv index.css.2 index.css
   
         echo "Re-insert css link in html"
-        #perl -0777 -pe 's#<body#<link rel="stylesheet" type="text/css" href="index.css" /><body#g' index_new.html > index.html
-        perl -0777 -pe 's#<body#<link rel="stylesheet" type="text/css" href="index.css" /><body#g' index_new.html > index2.html && mv index2.html index.html
+        #perl -0777 -pe 's#<body#<link rel="stylesheet" type="text/css" href="index.css" /><body#g' index.html > index.html
+        perl -0777 -pe 's#<body#<link rel="stylesheet" type="text/css" href="index.css" /><body#g' index.html > index.html.2 && mv index.html.2 index.html
         
-        echo "Cleanup"
-        rm index_new.html
+        #echo "Cleanup"
+        #rm index_new.html
         #mv index.css4 index.css  
         #rm index.css2 index.css3
         
-        echo "Run rename-css-selectors"
-        NODE_PATH=$(npm root -g) node -e 'const rcs = require("rename-css-selectors");
-          try { rcs.process.autoSync(["index.html", "index.css"]);
-          rcs.generateMappingSync("./", { overwrite: true });
-          } catch (err) {
-            console.error(err);
-          }' && mv rcs/* . && rmdir rcs && rm -f renaming_map.json
+        #echo "Run rename-css-selectors"
+        #NODE_PATH=$(npm root -g) node -e 'const rcs = require("rename-css-selectors");
+        #  try { rcs.process.autoSync(["index.html", "index.css"]);
+        #  rcs.generateMappingSync("./", { overwrite: true });
+        #  } catch (err) {
+        #    console.error(err);
+        #  }' && mv rcs/* . && rmdir rcs && rm -f renaming_map.json
         
         echo "Create and push commit"
         git add -A
