@@ -46,14 +46,6 @@ jobs:
         echo "Run tidy"
         tidy --show-warnings no -omit -ashtml -i -q --wrap 0 -m index.html || [[ $? -eq 1 ]]
         
-        echo "Run rename-css-selectors"
-        NODE_PATH=$(npm root -g) node -e 'const rcs = require("rename-css-selectors");
-          try { rcs.process.autoSync(["index.html"]);
-          rcs.generateMappingSync("./", { overwrite: true });
-          } catch (err) {
-            console.error(err);
-          }'
-        
         echo "Extract css from html"
         perl -0777 -ne 'while(m#<style[^>]*>([^<]*)</style>\n?#g){print "$1\n";}' index.html > index.css
         perl -0777 -pe 's#<style[^>]*>([^<]*)</style>\n?##g' index.html > index_new.html
@@ -68,12 +60,21 @@ jobs:
         cleancss -O2 --format beautify index.css3 > index.css4
   
         echo "Re-insert css link in html"
-        perl -0777 -pe 's#<body#<link rel="stylesheet" type="text/css" href="index.css" /><body#g' index.html > index_new.html
+        perl -0777 -pe 's#<body#<link rel="stylesheet" type="text/css" href="index.css" /><body#g' index_new.html > index.html
         
         echo "Cleanup"
-        mv index_new.html index.html
+        rm index_new.html
         mv index.css4 index.css  
         rm index.css2 index.css3
+        
+        echo "Run rename-css-selectors"
+        NODE_PATH=$(npm root -g) node -e 'const rcs = require("rename-css-selectors");
+          try { rcs.process.autoSync(["index.html", "index.css"]);
+          rcs.generateMappingSync("./", { overwrite: true });
+          } catch (err) {
+            console.error(err);
+          }'
+      
       
         echo "Create and push commit"
         git add -A
