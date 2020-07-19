@@ -50,8 +50,13 @@ jobs:
         perl -0777 -ne 'while(m#<style[^>]*>([^<]*)</style>\n?#g){print "$1\n";}' index.html > index.css
         perl -0777 -pe 's#<style[^>]*>([^<]*)</style>\n?##g' index.html > index.html.2 && mv index.html.2 index.html
         
-        echo "Run csdtidy"
-        csstidy index.css index.css.2 && mv index.css.2 index.css
+        #echo "Run csdtidy"
+        #csstidy index.css index.css.2 && mv index.css.2 index.css
+
+        echo "Run cleancss"
+        cleancss --help
+        cleancss -v
+        cleancss -O2 --format beautify index.css > index.css.2 && mv index.css.2 index.css
 
         echo "Run css-purge"
         #css-purge -i index.css -m index.html -o index.css.2 && mv index.css.2 index.css
@@ -60,9 +65,6 @@ jobs:
         #csso --force-media-merge -i index.css -o index.css.2 && mv index.css.2 index.css 
         #csso -i index.css -o index.css.2 && mv index.css.2 index.css
         
-        #echo "Run cleancss"
-        #cleancss -O2 --format beautify --format keep-breaks index.css > index.css.2 && mv index.css.2 index.css
-  
         echo "Re-insert css link in html"
         #perl -0777 -pe 's#<body#<link rel="stylesheet" type="text/css" href="index.css" /><body#g' index.html > index.html
         perl -0777 -pe 's#<body#<link rel="stylesheet" type="text/css" href="index.css" /><body#g' index.html > index.html.2 && mv index.html.2 index.html
