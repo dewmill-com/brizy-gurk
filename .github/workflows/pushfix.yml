@@ -21,10 +21,11 @@ jobs:
     
     - name: Install dependecies
       run: |
-        sudo apt-get -q -y install tidy cleancss csstidy node-clean-css
+        sudo apt-get -q -y install tidy csstidy
         sudo npm install -g csso-cli
         sudo npm install -g css-purge
         sudo npm install -g rename-css-selectors
+        sudo npm install -g clean-css-cli
 
     # Runs a set of commands using the runners shell
     - name: Forced push keep history
@@ -54,8 +55,6 @@ jobs:
         #csstidy index.css index.css.2 && mv index.css.2 index.css
 
         echo "Run cleancss"
-        cleancss --help
-        cleancss -v
         cleancss -O2 --format beautify index.css > index.css.2 && mv index.css.2 index.css
 
         echo "Run css-purge"
