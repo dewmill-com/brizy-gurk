@@ -76,6 +76,7 @@ jobs:
           #  } catch (err) {
           #    console.error(err);
           #  }' && mv rcs/* . && rmdir rcs && rm -f renaming_map.json
+        done
         
         echo "Create and push commit"
         git add -A
