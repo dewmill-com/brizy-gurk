@@ -58,7 +58,7 @@ jobs:
         #csso -i index.css -o index.css.2 && mv index.css.2 index.css
         
         echo "Run cleancss"
-        cleancss -O2 --format beautify index.css > index.css.2 && mv index.css.2 index.css
+        cleancss -O2 --format beautify --format keep-breaks index.css > index.css.2 && mv index.css.2 index.css
   
         echo "Re-insert css link in html"
         #perl -0777 -pe 's#<body#<link rel="stylesheet" type="text/css" href="index.css" /><body#g' index.html > index.html
