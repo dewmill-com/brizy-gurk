@@ -70,15 +70,12 @@ jobs:
         #rm index.css2 index.css3
         
         echo "Run rename-css-selectors"
-        #NODE_PATH=$(npm root -g) node -e 'const rcs = require("rename-css-selectors");
-        #  try { rcs.process.autoSync(["index.html", "index.css"]);
-        #  rcs.generateMappingSync("./", { overwrite: true });
-        #  } catch (err) {
-        #    console.error(err);
-        #  }'
-        #mv rcs/* .
-        #rmdir rcs
-        #rm -f renaming_map.json
+        NODE_PATH=$(npm root -g) node -e 'const rcs = require("rename-css-selectors");
+          try { rcs.process.autoSync(["index.html", "index.css"]);
+          rcs.generateMappingSync("./", { overwrite: true });
+          } catch (err) {
+            console.error(err);
+          }' && mv rcs/* . && rmdir rcs && rm -f renaming_map.json
         
         echo "Create and push commit"
         git add -A
