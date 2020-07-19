@@ -68,7 +68,7 @@ jobs:
         cleancss -O2 --format beautify index.css3 > index.css4
   
         echo "Re-insert css link in html"
-        perl -0777 -pe 's#</head>#<link rel="stylesheet" type="text/css" href="index.css" /></head>#g' index.html > index_new.html
+        perl -0777 -pe 's#<body#<link rel="stylesheet" type="text/css" href="index.css" /><body#g' index.html > index_new.html
         
         echo "Cleanup"
         mv index_new.html index.html
