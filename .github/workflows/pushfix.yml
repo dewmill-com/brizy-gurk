@@ -21,7 +21,7 @@ jobs:
     
     - name: Install dependecies
       run: |
-        sudo apt-get -y install tidy cleancss
+        sudo apt-get -q -y install tidy cleancss
         sudo npm install -g csso-cli
         sudo npm install -g css-purge
         sudo npm install -g rename-css-selectors
@@ -37,7 +37,7 @@ jobs:
         mv ../keep/.git .
         git fetch origin master
         git checkout origin/master -- .
-        tidy -omit -ashtml -i -q --wrap 0 -m index.html || [[ $? -eq 1 ]]
+        tidy --show-warnings no -omit -ashtml -i -q --wrap 0 -m index.html || [[ $? -eq 1 ]]
         
         NODE_PATH=$(npm root -g) node -e 'const rcs = require("rename-css-selectors");
           try { rcs.process.autoSync(["index.html"], options);
@@ -50,12 +50,12 @@ jobs:
         perl -0777 -pe 's#<style[^>]*>([^<]*)</style>\n?##g' index.html > index_new.html
         css-purge -i index.css -m index_new.html -o index.css2
         csso --force-media-merge -i index.css2 -o index.css3
-        cleancss -O2 --format beautify index.css3 > index.css4        
+        cleancss -O2 --format beautify index.css3 > index.css4
   
         perl -0777 -pe 's#</head>#<link rel="stylesheet" type="text/css" href="index.css" /></head>#g' index.html > index_new.html
         mv index_new.html index.html
         mv index.css4 index.css  
-        rm index.css2 index.css3 index_new.html
+        rm index.css2 index.css3
         
         [ '../keep/.[!.]*' = "$(echo ../keep/.[!.]*)" ] || mv ../keep/.[!.]* .
         [ '../keep/..?*' = "$(echo ../keep/..?*)" ] || mv ../keep/..?* .
