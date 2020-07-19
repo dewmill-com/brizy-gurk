@@ -21,7 +21,7 @@ jobs:
     
     - name: Install dependecies
       run: |
-        sudo apt-get -q -y install tidy cleancss csstidy
+        sudo apt-get -q -y install tidy cleancss csstidy node-clean-css
         sudo npm install -g csso-cli
         sudo npm install -g css-purge
         sudo npm install -g rename-css-selectors
@@ -54,7 +54,6 @@ jobs:
         #csstidy index.css index.css.2 && mv index.css.2 index.css
 
         echo "Run cleancss"
-        export NODE_PATH="$(npm root -g)"
         cleancss --help
         cleancss -v
         cleancss -O2 --format beautify index.css > index.css.2 && mv index.css.2 index.css
