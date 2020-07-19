@@ -48,7 +48,7 @@ jobs:
         
         echo "Run rename-css-selectors"
         NODE_PATH=$(npm root -g) node -e 'const rcs = require("rename-css-selectors");
-          try { rcs.process.autoSync(["index.html"], options);
+          try { rcs.process.autoSync(["index.html"]);
           rcs.generateMappingSync("./", { overwrite: true });
           } catch (err) {
             console.error(err);
