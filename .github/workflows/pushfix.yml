@@ -54,7 +54,8 @@ jobs:
         css-purge -i index.css -m index_new.html -o index.css2
         
         echo "Run csso"
-        csso --force-media-merge -i index.css2 -o index.css3
+        #csso --force-media-merge -i index.css2 -o index.css3 
+        csso -i index.css2 -o index.css3
         
         echo "Run cleancss"
         cleancss -O2 --format beautify index.css3 > index.css4
