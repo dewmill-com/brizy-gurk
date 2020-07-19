@@ -46,6 +46,10 @@ jobs:
         
         for FILE in *.html; do
         
+          if [ "$(stat -c%s $FILE)" -eq "0" ]; then
+            continue
+          fi
+        
           echo "Run tidy on $FILE"
           tidy --show-warnings no -omit -ashtml -i -q --wrap 0 -m "$FILE" || [[ $? -eq 1 ]]
         
