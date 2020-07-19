@@ -46,6 +46,7 @@ jobs:
         
         for FILE in *.html; do
         
+          echo "Size of $FILE: $(stat -c%s $FILE)"
           if [ "$(stat -c%s $FILE)" -eq "0" ]; then
             continue
           fi
