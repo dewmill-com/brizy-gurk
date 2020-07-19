@@ -76,7 +76,8 @@ jobs:
           }'
         mv rcs/* .
         rmdir rcs
-      
+        rm -f renaming_map.json
+        
         echo "Create and push commit"
         git add -A
         git commit -m "Changes $(date --rfc-2822)"
