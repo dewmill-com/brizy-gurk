@@ -39,6 +39,7 @@ jobs:
         
         echo "Copy latest files"
         git fetch origin master
+        rm -rf *
         git checkout origin/master -- .
         
         [ '../keep/.[!.]*' = "$(echo ../keep/.[!.]*)" ] || mv ../keep/.[!.]* .
