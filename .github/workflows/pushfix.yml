@@ -35,10 +35,18 @@ jobs:
         [ '.[!.]*' = "$(echo .[!.]*)" ] || mv .[!.]* ../keep/
         [ '..?*' = "$(echo ..?*)" ] || mv ..?* ../keep/
         mv ../keep/.git .
+        
+        echo "Copy latest files"
         git fetch origin master
         git checkout origin/master -- .
+        
+        [ '../keep/.[!.]*' = "$(echo ../keep/.[!.]*)" ] || mv ../keep/.[!.]* .
+        [ '../keep/..?*' = "$(echo ../keep/..?*)" ] || mv ../keep/..?* .
+        
+        echo "Run tidy"
         tidy --show-warnings no -omit -ashtml -i -q --wrap 0 -m index.html || [[ $? -eq 1 ]]
         
+        echo "Run rename-css-selectors"
         NODE_PATH=$(npm root -g) node -e 'const rcs = require("rename-css-selectors");
           try { rcs.process.autoSync(["index.html"], options);
           rcs.generateMappingSync("./", { overwrite: true });
@@ -46,19 +54,28 @@ jobs:
             console.error(err);
           }'
         
+        echo "Extract css from html"
         perl -0777 -ne 'while(m#<style[^>]*>([^<]*)</style>\n?#g){print "$1\n";}' index.html > index.css
         perl -0777 -pe 's#<style[^>]*>([^<]*)</style>\n?##g' index.html > index_new.html
+        
+        echo "Run css-purge"
         css-purge -i index.css -m index_new.html -o index.css2
+        
+        echo "Run csso"
         csso --force-media-merge -i index.css2 -o index.css3
+        
+        echo "Run cleancss"
         cleancss -O2 --format beautify index.css3 > index.css4
   
+        echo "Re-insert css link in html"
         perl -0777 -pe 's#</head>#<link rel="stylesheet" type="text/css" href="index.css" /></head>#g' index.html > index_new.html
+        
+        echo "Cleanup"
         mv index_new.html index.html
         mv index.css4 index.css  
         rm index.css2 index.css3
-        
-        [ '../keep/.[!.]*' = "$(echo ../keep/.[!.]*)" ] || mv ../keep/.[!.]* .
-        [ '../keep/..?*' = "$(echo ../keep/..?*)" ] || mv ../keep/..?* .
+      
+        echo "Create and push commit"
         git add -A
         git commit -m "Changes $(date --rfc-2822)"
         git push
