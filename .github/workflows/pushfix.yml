@@ -74,7 +74,8 @@ jobs:
           } catch (err) {
             console.error(err);
           }'
-      
+        mv rcs/* .
+        rmdir rcs
       
         echo "Create and push commit"
         git add -A
