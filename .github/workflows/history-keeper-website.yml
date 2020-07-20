@@ -4,5 +4,6 @@ on:
 jobs:
   history-keeper:
     name: Run history keeper
+    runs-on: ubuntu-20.04
     steps:
     - uses: rartino/history-keeper-website@master
