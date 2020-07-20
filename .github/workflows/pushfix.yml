@@ -69,8 +69,8 @@ jobs:
           #csso --force-media-merge -i "$FILE.css" -o "$FILE.css.2" && mv "$FILE.css.2" "$FILE.css"
           #csso -i "$FILE.css" -o "$FILE.css.2" && mv "$FILE.css.2" "$FILE.css"
         
-          echo "Run css-purge on $FILE"
-          css-purge -i "$FILE.css" -m "$FILE" -o "$FILE.css.2" && mv "$FILE.css.2" "$FILE.css"
+          #echo "Run css-purge on $FILE"
+          #css-purge -i "$FILE.css" -m "$FILE" -o "$FILE.css.2" && mv "$FILE.css.2" "$FILE.css"
         
           echo "Re-insert css link in html in $FILE"
           perl -0777 -pe 's#<body#<link rel="stylesheet" type="text/css" href="'$FILE.css'" /><body#g' "$FILE" > "$FILE.2" && mv "$FILE.2" "$FILE"
