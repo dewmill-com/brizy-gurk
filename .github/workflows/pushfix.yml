@@ -53,8 +53,8 @@ jobs:
           fi
         
           echo "Run tidy on $FILE"
-          #tidy --show-warnings no -omit -ashtml -i 2 -q --wrap 0 -m "$FILE" || [[ $? -eq 1 ]]
-          tidy -i 2 --quiet yes --show-body-only auto --show-errors 0 --wrap 0 -m "$FILE" || [[ $? -eq 1 ]]
+          tidy --show-warnings no -i 2 -q --wrap 0 -m "$FILE" || [[ $? -eq 1 ]]
+          #tidy -i 2 --quiet yes --show-body-only auto --show-errors 0 --wrap 0 -m "$FILE" || [[ $? -eq 1 ]]
         
           echo "Extract css from html for $FILE"
           perl -0777 -ne 'while(m#<style[^>]*>([^<]*)</style>\n?#g){print "$1\n";}' "$FILE" > "$FILE.css"
