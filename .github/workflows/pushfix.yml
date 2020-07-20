@@ -67,7 +67,7 @@ jobs:
         
           echo "Run csso on $FILE"
           #csso --force-media-merge -i "$FILE.css" -o "$FILE.css.2" && mv "$FILE.css.2" "$FILE.css"
-          csso -i "$FILE.css" -o "$FILE.css.2" && mv "$FILE.css.2" "$FILE.css"
+          #csso -i "$FILE.css" -o "$FILE.css.2" && mv "$FILE.css.2" "$FILE.css"
         
           echo "Run css-purge on $FILE"
           css-purge -i "$FILE.css" -m "$FILE" -o "$FILE.css.2" && mv "$FILE.css.2" "$FILE.css"
