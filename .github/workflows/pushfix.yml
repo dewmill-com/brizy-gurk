@@ -52,12 +52,12 @@ jobs:
             continue
           fi
         
-          echo "Run tidy on $FILE"
-          tidy --show-warnings no -omit -ashtml -i -q --wrap 0 -m "$FILE" || [[ $? -eq 1 ]]
+          #echo "Run tidy on $FILE"
+          #tidy --show-warnings no -omit -ashtml -i -q --wrap 0 -m "$FILE" || [[ $? -eq 1 ]]
         
-          #echo "Extract css from html for $FILE"
-          #perl -0777 -ne 'while(m#<style[^>]*>([^<]*)</style>\n?#g){print "$1\n";}' "$FILE" > "$FILE.css"
-          #perl -0777 -pe 's#<style[^>]*>([^<]*)</style>\n?##g' "$FILE" > "$FILE.2" && mv "$FILE.2" "$FILE"
+          echo "Extract css from html for $FILE"
+          perl -0777 -ne 'while(m#<style[^>]*>([^<]*)</style>\n?#g){print "$1\n";}' "$FILE" > "$FILE.css"
+          perl -0777 -pe 's#<style[^>]*>([^<]*)</style>\n?##g' "$FILE" > "$FILE.2" && mv "$FILE.2" "$FILE"
         
           #echo "Run csdtidy"
           #csstidy index.css index.css.2 && mv index.css.2 index.css
@@ -72,8 +72,8 @@ jobs:
           #echo "Run css-purge on $FILE"
           #css-purge -i "$FILE.css" -m "$FILE" -o "$FILE.css.2" && mv "$FILE.css.2" "$FILE.css"
         
-          #echo "Re-insert css link in html in $FILE"
-          #perl -0777 -pe 's#<body#<link rel="stylesheet" type="text/css" href="'$FILE.css'" /><body#g' "$FILE" > "$FILE.2" && mv "$FILE.2" "$FILE"
+          echo "Re-insert css link in html in $FILE"
+          perl -0777 -pe 's#<body#<link rel="stylesheet" type="text/css" href="'$FILE.css'" /><body#g' "$FILE" > "$FILE.2" && mv "$FILE.2" "$FILE"
     
           #echo "Run rename-css-selectors"
           #NODE_PATH=$(npm root -g) node -e 'const rcs = require("rename-css-selectors");
