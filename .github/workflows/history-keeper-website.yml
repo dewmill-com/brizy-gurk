@@ -1,4 +1,7 @@
 name: history-keeper-website
 on:
   repository_dispatch
-uses: rartino/history-keeper-website@master
+jobs:
+  history-keeper:
+    name: Run history keeper
+    uses: rartino/history-keeper-website@master
