@@ -54,7 +54,7 @@ jobs:
         
           #echo "Run tidy on $FILE"
           #tidy --show-warnings no -omit -ashtml -i -q --wrap 0 -m "$FILE" || [[ $? -eq 1 ]]
-          tidy --indent auto --quiet yes --show-body-only auto --show-errors 0 --wrap 0 "$FILE" || [[ $? -eq 1 ]]
+          tidy --indent auto --quiet yes --show-body-only auto --show-errors 0 --wrap 0 -m "$FILE" || [[ $? -eq 1 ]]
         
           echo "Extract css from html for $FILE"
           perl -0777 -ne 'while(m#<style[^>]*>([^<]*)</style>\n?#g){print "$1\n";}' "$FILE" > "$FILE.css"
