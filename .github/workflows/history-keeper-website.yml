@@ -1,2 +1,4 @@
 name: history-keeper-website
+on:
+  repository_dispatch
 uses: rartino/history-keeper-website@master
