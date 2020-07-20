@@ -1,0 +1,2 @@
+- name: history-keeper-website
+  uses: rartino/history-keeper-website@master
