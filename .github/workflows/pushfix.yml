@@ -53,7 +53,7 @@ jobs:
           fi
         
           echo "Run tidy on $FILE"
-          tidy --indent 1 --indent-spaces 2 --quiet yes --show-warnings 0 --wrap 0 -m "$FILE" || [[ $? -eq 1 ]]
+          tidy --indent 0 --indent-spaces 0 --quiet yes --show-warnings 0 --wrap 0 -m "$FILE" || [[ $? -eq 1 ]]
           #tidy --indent 1 --indent-spaces 2 --quiet yes --show-body-only --show-errors 0 --wrap 0 -m "$FILE" || [[ $? -eq 1 ]]
         
           echo "Extract css from html for $FILE"
