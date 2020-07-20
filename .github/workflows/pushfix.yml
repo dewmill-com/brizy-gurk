@@ -62,10 +62,10 @@ jobs:
           #echo "Run csdtidy"
           #csstidy index.css index.css.2 && mv index.css.2 index.css
 
-          echo "Run cleancss on $FILE"
-          cleancss -O2 --format beautify "$FILE.css" > "$FILE.css.2" && mv "$FILE.css.2" "$FILE.css"
+          #echo "Run cleancss on $FILE"
+          #cleancss -O2 --format beautify "$FILE.css" > "$FILE.css.2" && mv "$FILE.css.2" "$FILE.css"
         
-          echo "Run csso on $FILE"
+          #echo "Run csso on $FILE"
           #csso --force-media-merge -i "$FILE.css" -o "$FILE.css.2" && mv "$FILE.css.2" "$FILE.css"
           #csso -i "$FILE.css" -o "$FILE.css.2" && mv "$FILE.css.2" "$FILE.css"
         
