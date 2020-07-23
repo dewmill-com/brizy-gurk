@@ -2082,6 +2082,9 @@ input.brz-mm-check {
   .brz .brz-mega-menu__portal[data-popper-placement^="bottom"] {
     padding-bottom: 0; }
 
+.brz .brz-mega-menu__dropdown {
+  width: 100%; }
+
 .brz .brz-mega-menu__mmenu {
   overflow: visible;
   padding: 0; }
