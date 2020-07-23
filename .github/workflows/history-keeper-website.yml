@@ -1,5 +1,9 @@
 name: history-keeper-website
 on:
   repository_dispatch
-runs:
-  uses: rartino/history-keeper-website@master
+jobs:
+  history-keeper:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: rartino/history-keeper-website@master
+  
